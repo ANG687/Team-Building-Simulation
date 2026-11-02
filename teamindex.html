@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build & Lead Your Team - Interactive Simulation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col justify-between custom-scrollbar bg-slate-50">
+
+    <!-- TOP HEADER & REAL-TIME DASHBOARD -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200 px-4 py-3 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-sky-100 border border-sky-200 rounded-xl text-sky-600">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-slate-900 leading-tight">Build & Lead Your Team</h1>
+                        <p class="text-xs text-slate-500 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-sky-600"></i>
+                            Target Time: <span id="timer-display" class="font-mono text-sky-700 font-semibold">20:00</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Leadership Metrics Dashboard -->
+            <div class="grid grid-cols-4 gap-2 sm:gap-4 w-full md:w-auto bg-slate-100 p-2 rounded-xl border border-slate-200 text-center">
+                <div class="px-2">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Trust</div>
+                    <div id="score-trust" class="font-bold text-sky-600 text-sm sm:text-base">50%</div>
+                    <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
+                        <div id="bar-trust" class="bg-sky-500 h-full transition-all duration-500" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="px-2 border-l border-slate-200">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Engagement</div>
+                    <div id="score-engagement" class="font-bold text-emerald-600 text-sm sm:text-base">50%</div>
+                    <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
+                        <div id="bar-engagement" class="bg-emerald-500 h-full transition-all duration-500" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="px-2 border-l border-slate-200">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Performance</div>
+                    <div id="score-performance" class="font-bold text-amber-600 text-sm sm:text-base">50%</div>
+                    <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
+                        <div id="bar-performance" class="bg-amber-500 h-full transition-all duration-500" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="px-2 border-l border-slate-200">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Success</div>
+                    <div id="score-success" class="font-bold text-indigo-600 text-sm sm:text-base">50%</div>
+                    <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1 overflow-hidden">
+                        <div id="bar-success" class="bg-indigo-500 h-full transition-all duration-500" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+        <!-- METRICS EXPLANATION CARD (NEW NOTE ON TOP ELEMENTS) -->
+        <div class="mb-6 bg-sky-50/80 border border-sky-200 rounded-xl p-3.5 text-xs text-sky-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center gap-2 font-semibold text-sky-800 shrink-0">
+                <i data-lucide="info" class="w-4 h-4 text-sky-600"></i>
+                Dashboard Metrics Guide:
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] w-full">
+                <div><span class="font-bold text-sky-700">Trust:</span> Psychological safety & open communication.</div>
+                <div><span class="font-bold text-emerald-700">Engagement:</span> Morale, buy-in & active motivation.</div>
+                <div><span class="font-bold text-amber-700">Performance:</span> Output quality & deadline delivery.</div>
+                <div><span class="font-bold text-indigo-700">Success:</span> Overall project health & objective completion.</div>
+            </div>
+        </div>
+
+        <!-- SIMULATION STAGE NAVIGATION TRACKER -->
+        <div class="mb-8 overflow-x-auto pb-2">
+            <div class="flex items-center min-w-max justify-between text-xs text-slate-500 border-b border-slate-200 pb-3">
+                <span id="nav-step-0" class="flex items-center gap-1.5 text-sky-600 font-semibold">
+                    <i data-lucide="play-circle" class="w-4 h-4"></i> Intro
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-1" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="users" class="w-4 h-4"></i> 1. Belbin Team
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-2" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="heart-handshake" class="w-4 h-4"></i> 2. Team Culture
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-3" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i> 3. Compassion
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-4" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="zap" class="w-4 h-4"></i> 4. Influence
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-5" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="award" class="w-4 h-4"></i> 5. Empowerment
+                </span>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                <span id="nav-step-6" class="flex items-center gap-1.5 text-slate-400">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> Final Dashboard
+                </span>
+            </div>
+            <div class="w-full bg-slate-200 h-1.5 mt-2 rounded-full overflow-hidden">
+                <div id="stage-progress" class="bg-sky-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- STAGE 0: INTRODUCTION -->
+        <div id="stage-0-content" class="stage-card space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                <div class="max-w-3xl space-y-4">
+                    <span class="px-3 py-1 bg-sky-100 text-sky-700 border border-sky-200 text-xs font-semibold rounded-full">Simulation Overview</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Welcome, Project Manager!</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        You have been appointed as a manager at a global consulting firm to lead a high-stakes 6-month strategic project with a hybrid, multi-disciplinary team. Senior leadership expects excellent collaboration, engagement, and results.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <h3 class="font-semibold text-sky-700 text-sm mb-1 flex items-center gap-2">
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-sky-600"></i> 5 Interactive Scenarios
+                            </h3>
+                            <p class="text-slate-500 text-xs">Execute decision choices for team composition, culture building, compassionate leadership, influence tactics, and delegation.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <h3 class="font-semibold text-emerald-700 text-sm mb-1 flex items-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4 text-emerald-600"></i> Short Reflection Questions
+                            </h3>
+                            <p class="text-slate-500 text-xs">After each scenario action, write a focused reflection (strictly 30 to 100 words) justifying your choices.</p>
+                        </div>
+                    </div>
+                    <div class="pt-4">
+                        <button onclick="nextStage(1)" class="py-3 px-6 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Begin Stage 1 Scenario <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 1: BELBIN TEAM BUILDING -->
+        <div id="stage-1-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-semibold text-sky-600 uppercase tracking-wider">Stage 1 of 5</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Scenario 1: Build Your Team (Belbin Team Roles)</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Select 6 team members out of 9 candidates to build a balanced, high-performing hybrid project team.</p>
+                </div>
+
+                <!-- STEP 1: INTERACTIVE SELECTION -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span> 
+                            Interactive Task: Select 6 Team Members
+                        </h3>
+                        <span id="team-counter" class="text-xs px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-sky-700 font-semibold">Selected: 0 / 6</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Candidates Pool -->
+                        <div class="lg:col-span-2 space-y-3">
+                            <label class="block text-xs font-semibold text-slate-600">Available Candidates (Based on Belbin Roles):</label>
+                            <div id="candidate-pool" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+                        </div>
+                        <!-- Roster & Dynamic Feedback -->
+                        <div class="space-y-4">
+                            <label class="block text-xs font-semibold text-slate-600">Selected Team Roster:</label>
+                            <div id="selected-team" class="bg-slate-50 p-3 rounded-xl border border-slate-200 min-h-[180px] space-y-2 flex flex-col">
+                                <p id="empty-team-msg" class="text-xs text-slate-400 text-center my-auto italic">Click "+ Add to Team" on candidate cards to select 6 members.</p>
+                            </div>
+                            <div id="belbin-feedback" class="hidden p-3 rounded-xl text-xs space-y-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="text-right pt-2">
+                        <button id="stage1-lock-btn" onclick="lockStage1Decision()" class="py-2.5 px-5 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-sm transition-all">
+                            Confirm Selection & Proceed to Reflection Question <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: REFLECTIVE QUESTION -->
+                <div id="stage1-reflection-sec" class="opacity-40 pointer-events-none transition-all duration-300 border-t border-slate-200 pt-6 space-y-3">
+                    <h3 class="text-sm font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span> 
+                        Reflective Question
+                    </h3>
+                    <label class="block text-sm font-medium text-slate-800 leading-snug">
+                        Why did you choose this team composition? Which Belbin roles are strongest, and are any missing or under-represented?
+                        <span class="text-xs text-sky-700 font-normal block mt-1">(Required: 30 to 100 words)</span>
+                    </label>
+                    <textarea id="reflection-stage-1" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition-colors" placeholder="Explain your Belbin team balance reasoning (30-100 words)..."></textarea>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="wordcount-stage-1" class="text-slate-500">Word Count: 0 / 30-100</span>
+                        <span id="valid-stage-1" class="text-amber-600">Requirement not met</span>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevStage(0)" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-xl text-xs hover:bg-slate-300">Back</button>
+                        <button onclick="submitStage1()" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Submit & Proceed to Stage 2 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 2: TEAM CULTURE -->
+        <div id="stage-2-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-semibold text-sky-600 uppercase tracking-wider">Stage 2 of 5</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Scenario 2: Building Team Culture</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Challenge: Team members are capable, but collaboration is low and meetings are quiet. Select your top 3 leadership priorities.</p>
+                </div>
+
+                <!-- STEP 1: INTERACTIVE SELECTION -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span> 
+                        Interactive Task: Select Top 3 Actions
+                    </h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div id="culture-actions-pool" class="space-y-2.5"></div>
+                        <div class="space-y-3">
+                            <label class="block text-xs font-semibold text-slate-600">Selected Top 3 Priorities:</label>
+                            <div id="culture-priorities" class="bg-slate-50 p-4 rounded-xl border border-slate-200 min-h-[160px] space-y-2 flex flex-col justify-center"></div>
+                        </div>
+                    </div>
+                    <div class="text-right pt-2">
+                        <button id="stage2-lock-btn" onclick="lockStage2Decision()" class="py-2.5 px-5 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-sm transition-all">
+                            Confirm Priorities & Proceed to Reflection Question <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: REFLECTIVE QUESTION -->
+                <div id="stage2-reflection-sec" class="opacity-40 pointer-events-none transition-all duration-300 border-t border-slate-200 pt-6 space-y-3">
+                    <h3 class="text-sm font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span> 
+                        Reflective Question
+                    </h3>
+                    <label class="block text-sm font-medium text-slate-800 leading-snug">
+                        What three actions would you implement first to build trust, collaboration, and shared values, and why?
+                        <span class="text-xs text-sky-700 font-normal block mt-1">(Required: 30 to 100 words)</span>
+                    </label>
+                    <textarea id="reflection-stage-2" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition-colors" placeholder="Justify your culture-building strategy (30-100 words)..."></textarea>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="wordcount-stage-2" class="text-slate-500">Word Count: 0 / 30-100</span>
+                        <span id="valid-stage-2" class="text-amber-600">Requirement not met</span>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevStage(1)" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-xl text-xs hover:bg-slate-300">Back</button>
+                        <button onclick="submitStage2()" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Submit & Proceed to Stage 3 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 3: COMPASSIONATE LEADERSHIP -->
+        <div id="stage-3-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-semibold text-sky-600 uppercase tracking-wider">Stage 3 of 5</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Scenario 3: Compassionate Leadership Challenge</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Challenge: A key team member has become unusually quiet and missed two deadlines. How do you respond?</p>
+                </div>
+
+                <!-- STEP 1: INTERACTIVE SELECTION -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span> 
+                        Interactive Task: Select Management Response
+                    </h3>
+                    <div id="compassion-options" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                    <div id="compassion-consequence" class="hidden p-4 rounded-xl text-xs sm:text-sm"></div>
+
+                    <div class="text-right pt-2">
+                        <button id="stage3-lock-btn" onclick="lockStage3Decision()" class="py-2.5 px-5 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-sm transition-all">
+                            Confirm Decision & Proceed to Reflection Question <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: REFLECTIVE QUESTION -->
+                <div id="stage3-reflection-sec" class="opacity-40 pointer-events-none transition-all duration-300 border-t border-slate-200 pt-6 space-y-3">
+                    <h3 class="text-sm font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span> 
+                        Reflective Question
+                    </h3>
+                    <label class="block text-sm font-medium text-slate-800 leading-snug">
+                        How can a manager effectively balance compassion/empathy with performance accountability?
+                        <span class="text-xs text-sky-700 font-normal block mt-1">(Required: 30 to 100 words)</span>
+                    </label>
+                    <textarea id="reflection-stage-3" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition-colors" placeholder="Reflect on compassionate leadership principles (30-100 words)..."></textarea>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="wordcount-stage-3" class="text-slate-500">Word Count: 0 / 30-100</span>
+                        <span id="valid-stage-3" class="text-amber-600">Requirement not met</span>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevStage(2)" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-xl text-xs hover:bg-slate-300">Back</button>
+                        <button onclick="submitStage3()" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Submit & Proceed to Stage 4 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 4: POWER & INFLUENCE -->
+        <div id="stage-4-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-semibold text-sky-600 uppercase tracking-wider">Stage 4 of 5</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Scenario 4: Power and Influence Strategy</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Challenge: Convince your hybrid team to adopt a new collaborative project management tool.</p>
+                </div>
+
+                <!-- STEP 1: INTERACTIVE SELECTION -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span> 
+                        Interactive Task: Select Influence Tactic (Yukl / French & Raven)
+                    </h3>
+                    <div id="influence-tactics" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+                    <div id="influence-feedback" class="hidden p-4 rounded-xl text-xs sm:text-sm"></div>
+
+                    <div class="text-right pt-2">
+                        <button id="stage4-lock-btn" onclick="lockStage4Decision()" class="py-2.5 px-5 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-sm transition-all">
+                            Confirm Tactic & Proceed to Reflection Question <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: REFLECTIVE QUESTION -->
+                <div id="stage4-reflection-sec" class="opacity-40 pointer-events-none transition-all duration-300 border-t border-slate-200 pt-6 space-y-3">
+                    <h3 class="text-sm font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span> 
+                        Reflective Question
+                    </h3>
+                    <label class="block text-sm font-medium text-slate-800 leading-snug">
+                        Why did you select this influence tactic, and why does it build long-term commitment over simple compliance?
+                        <span class="text-xs text-sky-700 font-normal block mt-1">(Required: 30 to 100 words)</span>
+                    </label>
+                    <textarea id="reflection-stage-4" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition-colors" placeholder="Analyze your choice using power and influence theory (30-100 words)..."></textarea>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="wordcount-stage-4" class="text-slate-500">Word Count: 0 / 30-100</span>
+                        <span id="valid-stage-4" class="text-amber-600">Requirement not met</span>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevStage(3)" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-xl text-xs hover:bg-slate-300">Back</button>
+                        <button onclick="submitStage4()" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Submit & Proceed to Stage 5 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 5: EMPOWERMENT & DELEGATION -->
+        <div id="stage-5-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 pb-4">
+                    <span class="text-xs font-semibold text-sky-600 uppercase tracking-wider">Stage 5 of 5</span>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1">Scenario 5: Strategic Empowerment & Delegation</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Challenge: Assign the appropriate leadership support mechanism for each employee based on competence and confidence.</p>
+                </div>
+
+                <!-- STEP 1: INTERACTIVE SELECTION -->
+                <div class="space-y-4">
+                    <h3 class="text-sm font-bold text-sky-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span> 
+                        Interactive Task: Match Support Mechanisms
+                    </h3>
+                    <div id="empowerment-members" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                    <div id="empowerment-feedback" class="hidden p-4 rounded-xl text-xs sm:text-sm"></div>
+
+                    <div class="text-right pt-2">
+                        <button id="stage5-lock-btn" onclick="lockStage5Decision()" class="py-2.5 px-5 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-sm transition-all">
+                            Confirm Assignments & Proceed to Reflection Question <i data-lucide="chevron-down" class="w-4 h-4 inline ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: REFLECTIVE QUESTION -->
+                <div id="stage5-reflection-sec" class="opacity-40 pointer-events-none transition-all duration-300 border-t border-slate-200 pt-6 space-y-3">
+                    <h3 class="text-sm font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">2</span> 
+                        Reflective Question
+                    </h3>
+                    <label class="block text-sm font-medium text-slate-800 leading-snug">
+                        What conditions must exist in a team before empowerment and delegation can be successful without quality failure?
+                        <span class="text-xs text-sky-700 font-normal block mt-1">(Required: 30 to 100 words)</span>
+                    </label>
+                    <textarea id="reflection-stage-5" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-800 focus:outline-none focus:border-sky-500 transition-colors" placeholder="Discuss conditions for effective empowerment (30-100 words)..."></textarea>
+                    <div class="flex justify-between items-center text-xs">
+                        <span id="wordcount-stage-5" class="text-slate-500">Word Count: 0 / 30-100</span>
+                        <span id="valid-stage-5" class="text-amber-600">Requirement not met</span>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4">
+                        <button onclick="prevStage(4)" class="py-2 px-4 bg-slate-200 text-slate-700 rounded-xl text-xs hover:bg-slate-300">Back</button>
+                        <button onclick="submitStage5()" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center gap-2">
+                            Generate Final Leadership Report <i data-lucide="award" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 6: FINAL LEADERSHIP DASHBOARD & REPORT -->
+        <div id="stage-6-content" class="stage-card hidden space-y-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm space-y-8">
+                <div class="text-center space-y-2 border-b border-slate-200 pb-6">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold rounded-full">Simulation Complete</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Your Leadership Strategy Profile</h2>
+                    <p class="text-slate-500 text-xs sm:text-sm">Comprehensive performance evaluation based on Unit 8 Leadership Principles.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Final Score Scorecard -->
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-4">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Overall Leadership Score</h3>
+                        <div class="relative w-36 h-36 flex items-center justify-center">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" stroke="currentColor" stroke-width="8" class="text-slate-200" fill="transparent"/>
+                                <circle id="final-score-circle" cx="60" cy="60" r="54" stroke="currentColor" stroke-width="8" class="text-sky-600 transition-all duration-1000" fill="transparent" stroke-dasharray="339.29" stroke-dashoffset="339.29" stroke-linecap="round"/>
+                            </svg>
+                            <span id="final-score-text" class="absolute text-3xl font-bold text-slate-900">0%</span>
+                        </div>
+                        <div id="archetype-badge" class="px-3 py-1 bg-sky-100 border border-sky-300 text-sky-800 font-bold text-xs rounded-full">
+                            <span id="archetype-title">Calculating...</span>
+                        </div>
+                    </div>
+
+                    <!-- Archetype Details & Breakdown -->
+                    <div class="lg:col-span-2 bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 mb-2">Leadership Profile Breakdown</h3>
+                            <p id="archetype-desc" class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4"></p>
+                            
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center border-t border-slate-200 pt-4">
+                                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm">
+                                    <div class="text-[10px] font-semibold text-slate-500">Trust</div>
+                                    <div id="final-trust-val" class="font-bold text-sky-600 text-sm">50%</div>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm">
+                                    <div class="text-[10px] font-semibold text-slate-500">Engagement</div>
+                                    <div id="final-engagement-val" class="font-bold text-emerald-600 text-sm">50%</div>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm">
+                                    <div class="text-[10px] font-semibold text-slate-500">Performance</div>
+                                    <div id="final-performance-val" class="font-bold text-amber-600 text-sm">50%</div>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm">
+                                    <div class="text-[10px] font-semibold text-slate-500">Success</div>
+                                    <div id="final-success-val" class="font-bold text-indigo-600 text-sm">50%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reflections Summary Log -->
+                <div class="space-y-4 pt-4 border-t border-slate-200">
+                    <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i data-lucide="file-check" class="w-5 h-5 text-emerald-600"></i>
+                        Submitted Reflections Summary (5 Scenarios)
+                    </h3>
+                    <div id="summary-reflections-container" class="space-y-3 text-xs"></div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-between pt-6 border-t border-slate-200">
+                    <button onclick="resetSimulation()" class="py-2.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition-all">
+                        Restart Simulation
+                    </button>
+                    <button onclick="window.print()" class="py-2.5 px-6 bg-sky-600 hover:bg-sky-500 text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="printer" class="w-4 h-4"></i> Export / Print Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-200 py-3 text-center text-xs text-slate-500 bg-white">
+        Unit 8: Knowing Your Team — Interactive Simulation & Written Reflections
+    </footer>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Global Simulation State
+        let currentStage = 0;
+        let timerSeconds = 20 * 60; // 20 minutes countdown
+        let timerInterval = null;
+
+        let metrics = {
+            trust: 50,
+            engagement: 50,
+            performance: 50,
+            success: 50
+        };
+
+        // Belbin Candidates Database
+        const belbinCandidates = [
+            { id: 1, name: "Sarah", role: "Shaper", cat: "Action", desc: "Driven, dynamic, thrives under pressure." },
+            { id: 2, name: "Alex", role: "Implementer", cat: "Action", desc: "Practical, reliable, efficient." },
+            { id: 3, name: "Priya", role: "Completer-Finisher", cat: "Action", desc: "Painstaking, conscientious, details-focused." },
+            { id: 4, name: "Michael", role: "Coordinator", cat: "Social", desc: "Mature, confident, delegates effectively." },
+            { id: 5, name: "Sam", role: "Team Worker", cat: "Social", desc: "Cooperative, diplomatic, perceptive." },
+            { id: 6, name: "Emma", role: "Resource Investigator", cat: "Social", desc: "Outgoing, enthusiastic, networker." },
+            { id: 7, name: "David", role: "Plant", cat: "Thinking", desc: "Creative, imaginative, problem-solver." },
+            { id: 8, name: "Lisa", role: "Monitor Evaluator", cat: "Thinking", desc: "Sober, strategic, discerning analyst." },
+            { id: 9, name: "Ahmed", role: "Specialist", cat: "Thinking", desc: "Single-minded, dedicated domain expert." }
+        ];
+        let selectedTeamIds = [];
+
+        // Culture Actions Database
+        const cultureActions = [
+            { id: 'charter', title: 'Create a Team Charter', desc: 'Define shared values, ground rules, and common goals together.', quality: 'high' },
+            { id: 'problem', title: 'Encourage Shared Problem-Solving', desc: 'Structure meetings around peer collaboration rather than top-down reporting.', quality: 'high' },
+            { id: '1on1', title: 'Schedule Regular One-to-Ones', desc: 'Build individual trust and check on workload/wellbeing.', quality: 'high' },
+            { id: 'learning', title: 'Introduce Team Learning Sessions', desc: 'Hold weekly knowledge-sharing & psychological safety workshops.', quality: 'medium' },
+            { id: 'social', title: 'Run a Social Team Event', desc: 'Organize informal virtual coffee breaks to build personal rapport.', quality: 'medium' },
+            { id: 'deadlines', title: 'Focus Only on Project Deadlines', desc: 'Push harder on deadlines and demand weekly output reports.', quality: 'low' }
+        ];
+        let culturePriorities = [];
+
+        // Compassion Options
+        const compassionOptions = [
+            { id: 'A', text: "A. Publicly challenge them during the team meeting to enforce accountability.", trust: -15, eng: -20, perf: -10, feedback: "Public confrontation destroys psychological safety and lowers team trust and engagement." },
+            { id: 'B', text: "B. Ignore the issue and hope performance improves naturally.", trust: -5, eng: -10, perf: -15, feedback: "Ignoring slumps creates resentment among other high-performing team members." },
+            { id: 'C', text: "C. Arrange a private conversation to understand underlying difficulties compassionately.", trust: +15, eng: +15, perf: +10, feedback: "Private compassionate inquiry balances empathy with accountability, building deep trust." },
+            { id: 'D', text: "D. Immediately remove them from key project tasks without discussion.", trust: -10, eng: -15, perf: +0, feedback: "Premature isolation demotivates employee engagement and signals low leader support." }
+        ];
+        let chosenCompassion = null;
+
+        // Influence Options
+        const influenceOptions = [
+            { id: 'rational', title: 'Rational Persuasion', power: 'Expert / Logical', desc: 'Present logical arguments and concrete evidence showing efficiency gains.', success: +15, eng: +10, feedback: "Highly effective for analytical workers; generates commitment through logical buy-in." },
+            { id: 'inspirational', title: 'Inspirational Appeal', power: 'Referent / Values', desc: 'Appeal to shared team values and the exciting vision of innovation.', success: +15, eng: +15, feedback: "Creates high enthusiasm and emotional commitment across hybrid teams." },
+            { id: 'consultation', title: 'Consultation', power: 'Empowerment', desc: 'Invite the team to help customize the software setup to match their workflow.', success: +15, eng: +15, feedback: "Involving users directly in implementation eliminates resistance." },
+            { id: 'exchange', title: 'Exchange Tactic', power: 'Reward Power', desc: 'Offer compressed work hours in exchange for adopting the tool quickly.', success: +5, eng: +5, feedback: "Yields compliance but creates transactional expectations." },
+            { id: 'pressure', title: 'Pressure Tactic', power: 'Coercive Power', desc: 'Issue strict directives with penalties for non-compliance by Friday.', success: -15, eng: -20, feedback: "Forces minimal compliance while severely damaging long-term trust and morale." },
+            { id: 'legitimation', title: 'Legitimation', power: 'Legitimate Power', desc: 'State that senior management mandates this software across all departments.', success: +0, eng: -5, feedback: "Produces basic compliance but zero enthusiastic buy-in." }
+        ];
+        let chosenInfluence = null;
+
+        // Empowerment Candidates & Assignments
+        const empowermentMembers = [
+            { id: 1, name: "Sam (Team Worker)", comp: "High Competence", conf: "Low Confidence", target: "Coaching & Mentoring" },
+            { id: 2, name: "Alex (Implementer)", comp: "High Competence", conf: "High Confidence", target: "Autonomy & Delegation" },
+            { id: 3, name: "New Junior Member", comp: "Low Competence", conf: "High Confidence", target: "Training & Structured Guidance" }
+        ];
+        const supportOptions = [
+            "Autonomy & Delegation",
+            "Coaching & Mentoring",
+            "Training & Structured Guidance"
+        ];
+        let empowermentAssignments = {};
+
+        // Reflections Data
+        const reflections = { stage1: "", stage2: "", stage3: "", stage4: "", stage5: "" };
+
+        // DOM Loaded Init
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            startTimer();
+            renderBelbinCandidates();
+            renderCultureActions();
+            renderCompassionOptions();
+            renderInfluenceTactics();
+            renderEmpowermentStage();
+
+            // Word Count Event Listeners
+            for (let i = 1; i <= 5; i++) {
+                const el = document.getElementById(`reflection-stage-${i}`);
+                if (el) el.addEventListener('input', () => updateWordCount(i));
+            }
+        });
+
+        // Countdown Timer
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+                    const s = (timerSeconds % 60).toString().padStart(2, '0');
+                    document.getElementById('timer-display').innerText = `${m}:${s}`;
+                }
+            }, 1000);
+        }
+
+        // Metrics Dashboard Updater
+        function updateMetrics(trustDelta = 0, engDelta = 0, perfDelta = 0, succDelta = 0) {
+            metrics.trust = Math.min(100, Math.max(0, metrics.trust + trustDelta));
+            metrics.engagement = Math.min(100, Math.max(0, metrics.engagement + engDelta));
+            metrics.performance = Math.min(100, Math.max(0, metrics.performance + perfDelta));
+            metrics.success = Math.min(100, Math.max(0, metrics.success + succDelta));
+
+            document.getElementById('score-trust').innerText = `${metrics.trust}%`;
+            document.getElementById('bar-trust').style.width = `${metrics.trust}%`;
+
+            document.getElementById('score-engagement').innerText = `${metrics.engagement}%`;
+            document.getElementById('bar-engagement').style.width = `${metrics.engagement}%`;
+
+            document.getElementById('score-performance').innerText = `${metrics.performance}%`;
+            document.getElementById('bar-performance').style.width = `${metrics.performance}%`;
+
+            document.getElementById('score-success').innerText = `${metrics.success}%`;
+            document.getElementById('bar-success').style.width = `${metrics.success}%`;
+        }
+
+        // Navigation Manager
+        function nextStage(targetStage) {
+            document.getElementById(`stage-${currentStage}-content`).classList.add('hidden');
+            document.getElementById(`stage-${targetStage}-content`).classList.remove('hidden');
+
+            const oldNav = document.getElementById(`nav-step-${currentStage}`);
+            if (oldNav) {
+                oldNav.classList.remove('text-sky-600', 'font-semibold');
+                oldNav.classList.add('text-emerald-600');
+            }
+
+            const newNav = document.getElementById(`nav-step-${targetStage}`);
+            if (newNav) {
+                newNav.classList.remove('text-slate-400');
+                newNav.classList.add('text-sky-600', 'font-semibold');
+            }
+
+            currentStage = targetStage;
+            const progress = (currentStage / 6) * 100;
+            document.getElementById('stage-progress').style.width = `${progress}%`;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStage(targetStage) {
+            nextStage(targetStage);
+        }
+
+        // Word Count Validation (Strictly 30-100 words requirement)
+        function updateWordCount(stageNum) {
+            const text = document.getElementById(`reflection-stage-${stageNum}`).value.trim();
+            const words = text ? text.split(/\s+/).filter(w => w.length > 0).length : 0;
+            const wcElem = document.getElementById(`wordcount-stage-${stageNum}`);
+            const validElem = document.getElementById(`valid-stage-${stageNum}`);
+
+            wcElem.innerText = `Word Count: ${words} / 30-100`;
+
+            if (words >= 30 && words <= 100) {
+                validElem.innerText = "✓ Length optimal (30-100 words)";
+                validElem.className = "text-emerald-600 font-medium";
+                reflections[`stage${stageNum}`] = text;
+                return true;
+            } else if (words < 30) {
+                validElem.innerText = `Need ${30 - words} more words (Target: 30-100)`;
+                validElem.className = "text-amber-600 font-medium";
+                return false;
+            } else {
+                validElem.innerText = `Exceeds max length (${words}/100 words). Shorten text.`;
+                validElem.className = "text-amber-600 font-medium";
+                reflections[`stage${stageNum}`] = text;
+                return true;
+            }
+        }
+
+        // STAGE 1 LOGIC
+        function renderBelbinCandidates() {
+            const pool = document.getElementById('candidate-pool');
+            pool.innerHTML = '';
+            belbinCandidates.forEach(c => {
+                const isSelected = selectedTeamIds.includes(c.id);
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border text-xs flex flex-col justify-between space-y-2 transition-all ${
+                    isSelected ? 'bg-slate-100 border-slate-300 opacity-50' : 'bg-white border-slate-200 hover:border-sky-400 shadow-sm'
+                }`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm">${c.name}</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] ${
+                                c.cat === 'Action' ? 'bg-rose-100 text-rose-700 border border-rose-200' :
+                                c.cat === 'Social' ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                                'bg-sky-100 text-sky-700 border border-sky-200'
+                            }">${c.cat}</span>
+                        </div>
+                        <div class="text-sky-700 font-semibold mt-0.5 text-[11px]">${c.role}</div>
+                        <p class="text-slate-500 text-[10px] mt-1 leading-tight">${c.desc}</p>
+                    </div>
+                    <button onclick="toggleCandidate(${c.id})" ${isSelected ? 'disabled' : ''} class="w-full py-1.5 px-2 rounded-lg text-xs font-semibold ${
+                        isSelected ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-sky-50 hover:bg-sky-600 hover:text-white text-sky-700 border border-sky-200 transition-colors'
+                    }">
+                        ${isSelected ? 'Added' : '+ Add to Team'}
+                    </button>
+                `;
+                pool.appendChild(card);
+            });
+            renderSelectedTeam();
+        }
+
+        function toggleCandidate(id) {
+            if (selectedTeamIds.includes(id)) {
+                selectedTeamIds = selectedTeamIds.filter(i => i !== id);
+            } else {
+                if (selectedTeamIds.length >= 6) return;
+                selectedTeamIds.push(id);
+            }
+            renderBelbinCandidates();
+            analyzeBelbinTeam();
+        }
+
+        function renderSelectedTeam() {
+            const container = document.getElementById('selected-team');
+            document.getElementById('team-counter').innerText = `Selected: ${selectedTeamIds.length} / 6`;
+            
+            if (selectedTeamIds.length === 0) {
+                container.innerHTML = `<p id="empty-team-msg" class="text-xs text-slate-400 text-center my-auto italic">Click "+ Add" on candidates to assign them here.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            selectedTeamIds.forEach(id => {
+                const c = belbinCandidates.find(item => item.id === id);
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between bg-white p-2 rounded-lg border border-slate-200 shadow-sm text-xs";
+                item.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold text-slate-900">${c.name}</span>
+                        <span class="text-sky-700 text-[11px]">(${c.role})</span>
+                    </div>
+                    <button onclick="toggleCandidate(${c.id})" class="text-rose-500 hover:text-rose-700 p-1">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        function analyzeBelbinTeam() {
+            const feedback = document.getElementById('belbin-feedback');
+            if (selectedTeamIds.length < 6) {
+                feedback.classList.add('hidden');
+                return;
+            }
+
+            const selectedObjects = selectedTeamIds.map(id => belbinCandidates.find(c => c.id === id));
+            const cats = selectedObjects.map(c => c.cat);
+            const actionCount = cats.filter(c => c === 'Action').length;
+            const socialCount = cats.filter(c => c === 'Social').length;
+            const thinkingCount = cats.filter(c => c === 'Thinking').length;
+
+            feedback.classList.remove('hidden');
+            let balanceQuality = (actionCount >= 1 && socialCount >= 1 && thinkingCount >= 1) ? "Well-Balanced Team" : "Imbalanced Team Composition";
+            let colorClass = (actionCount >= 1 && socialCount >= 1 && thinkingCount >= 1) ? "border-emerald-300 text-emerald-800 bg-emerald-50" : "border-amber-300 text-amber-800 bg-amber-50";
+
+            feedback.className = `p-3 rounded-xl border text-xs space-y-1 ${colorClass}`;
+            feedback.innerHTML = `
+                <div class="font-bold flex justify-between">
+                    <span>Balance Status: ${balanceQuality}</span>
+                    <span>A:${actionCount} | S:${socialCount} | T:${thinkingCount}</span>
+                </div>
+                <p class="text-[11px] leading-relaxed">
+                    ${actionCount === 0 ? "⚠️ Missing Action roles (Shaper/Implementer). " : ""}
+                    ${socialCount === 0 ? "⚠️ Missing Social roles (Coordinator/Team Worker). " : ""}
+                    ${thinkingCount === 0 ? "⚠️ Missing Thinking roles (Plant/Monitor Evaluator). " : ""}
+                    ${actionCount > 0 && socialCount > 0 && thinkingCount > 0 ? "✓ Excellent diversity across Belbin clusters!" : ""}
+                </p>
+            `;
+        }
+
+        function lockStage1Decision() {
+            if (selectedTeamIds.length !== 6) {
+                alert("Please select exactly 6 team members before unlocking the reflection.");
+                return;
+            }
+            const sec = document.getElementById('stage1-reflection-sec');
+            sec.classList.remove('opacity-40', 'pointer-events-none');
+            document.getElementById('stage1-lock-btn').classList.add('hidden');
+            document.getElementById('reflection-stage-1').focus();
+        }
+
+        function submitStage1() {
+            if (!updateWordCount(1)) {
+                alert("Please complete the reflective question with 30 to 100 words.");
+                return;
+            }
+            const cats = selectedTeamIds.map(id => belbinCandidates.find(c => c.id === id).cat);
+            const isBalanced = cats.includes('Action') && cats.includes('Social') && cats.includes('Thinking');
+            updateMetrics(isBalanced ? +10 : -5, +5, isBalanced ? +10 : +0, +5);
+            nextStage(2);
+        }
+
+        // STAGE 2 LOGIC
+        function renderCultureActions() {
+            const pool = document.getElementById('culture-actions-pool');
+            pool.innerHTML = '';
+            cultureActions.forEach(action => {
+                const isChosen = culturePriorities.includes(action.id);
+                const btn = document.createElement('div');
+                btn.className = `p-3 rounded-xl border text-xs cursor-pointer transition-all ${
+                    isChosen ? 'bg-sky-50 border-sky-400 opacity-60' : 'bg-white border-slate-200 hover:border-sky-400 shadow-sm'
+                }`;
+                btn.onclick = () => selectCultureAction(action.id);
+                btn.innerHTML = `
+                    <div class="font-semibold text-slate-900 flex justify-between">
+                        <span>${action.title}</span>
+                        <span class="text-sky-700 font-medium">${isChosen ? 'Selected' : '+ Select'}</span>
+                    </div>
+                    <p class="text-slate-500 text-[11px] mt-1 leading-tight">${action.desc}</p>
+                `;
+                pool.appendChild(btn);
+            });
+            renderCulturePriorities();
+        }
+
+        function selectCultureAction(id) {
+            if (culturePriorities.includes(id)) {
+                culturePriorities = culturePriorities.filter(item => item !== id);
+            } else {
+                if (culturePriorities.length >= 3) return;
+                culturePriorities.push(id);
+            }
+            renderCultureActions();
+        }
+
+        function renderCulturePriorities() {
+            const container = document.getElementById('culture-priorities');
+            container.innerHTML = '';
+            if (culturePriorities.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center italic">Select top 3 management actions from the choices.</p>`;
+                return;
+            }
+
+            culturePriorities.forEach((id, idx) => {
+                const action = cultureActions.find(a => a.id === id);
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-white p-2.5 rounded-lg border border-slate-200 shadow-sm text-xs";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <span class="w-5 h-5 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[10px]">${idx + 1}</span>
+                        <span class="font-medium text-slate-900">${action.title}</span>
+                    </div>
+                    <button onclick="selectCultureAction('${action.id}')" class="text-rose-500 hover:text-rose-700">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function lockStage2Decision() {
+            if (culturePriorities.length !== 3) {
+                alert("Please select exactly 3 priority actions before unlocking the reflection.");
+                return;
+            }
+            const sec = document.getElementById('stage2-reflection-sec');
+            sec.classList.remove('opacity-40', 'pointer-events-none');
+            document.getElementById('stage2-lock-btn').classList.add('hidden');
+            document.getElementById('reflection-stage-2').focus();
+        }
+
+        function submitStage2() {
+            if (!updateWordCount(2)) {
+                alert("Please complete the reflective question with 30 to 100 words.");
+                return;
+            }
+            const chosenObjs = culturePriorities.map(id => cultureActions.find(a => a.id === id));
+            const highCount = chosenObjs.filter(o => o.quality === 'high').length;
+            const lowCount = chosenObjs.filter(o => o.quality === 'low').length;
+            updateMetrics(highCount * 5 - lowCount * 10, highCount * 5 - lowCount * 10, +5, +5);
+            nextStage(3);
+        }
+
+        // STAGE 3 LOGIC
+        function renderCompassionOptions() {
+            const container = document.getElementById('compassion-options');
+            container.innerHTML = '';
+            compassionOptions.forEach(opt => {
+                const div = document.createElement('div');
+                const isSelected = chosenCompassion === opt.id;
+                div.className = `p-3.5 rounded-xl border text-xs sm:text-sm cursor-pointer transition-all ${
+                    isSelected ? 'bg-sky-50 border-sky-500 text-slate-900 font-semibold shadow-sm' : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
+                }`;
+                div.onclick = () => selectCompassion(opt.id);
+                div.innerText = opt.text;
+                container.appendChild(div);
+            });
+        }
+
+        function selectCompassion(id) {
+            chosenCompassion = id;
+            renderCompassionOptions();
+            const opt = compassionOptions.find(o => o.id === id);
+            const feedback = document.getElementById('compassion-consequence');
+            feedback.classList.remove('hidden');
+            feedback.className = `p-3.5 rounded-xl border text-xs sm:text-sm ${
+                opt.id === 'C' ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'
+            }`;
+            feedback.innerHTML = `<strong>Consequence Analysis:</strong> ${opt.feedback}`;
+        }
+
+        function lockStage3Decision() {
+            if (!chosenCompassion) {
+                alert("Please select a management response first.");
+                return;
+            }
+            const sec = document.getElementById('stage3-reflection-sec');
+            sec.classList.remove('opacity-40', 'pointer-events-none');
+            document.getElementById('stage3-lock-btn').classList.add('hidden');
+            document.getElementById('reflection-stage-3').focus();
+        }
+
+        function submitStage3() {
+            if (!updateWordCount(3)) {
+                alert("Please complete the reflective question with 30 to 100 words.");
+                return;
+            }
+            const opt = compassionOptions.find(o => o.id === chosenCompassion);
+            updateMetrics(opt.trust, opt.eng, opt.perf, +5);
+            nextStage(4);
+        }
+
+        // STAGE 4 LOGIC
+        function renderInfluenceTactics() {
+            const container = document.getElementById('influence-tactics');
+            container.innerHTML = '';
+            influenceOptions.forEach(tactic => {
+                const isSelected = chosenInfluence === tactic.id;
+                const div = document.createElement('div');
+                div.className = `p-3.5 rounded-xl border text-xs cursor-pointer flex flex-col justify-between transition-all ${
+                    isSelected ? 'bg-sky-50 border-sky-500 shadow-sm' : 'bg-white border-slate-200 hover:border-sky-300'
+                }`;
+                div.onclick = () => selectInfluence(tactic.id);
+                div.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm">${tactic.title}</span>
+                            <span class="px-1.5 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-medium">${tactic.power}</span>
+                        </div>
+                        <p class="text-slate-600 text-[11px] mt-1.5 leading-relaxed">${tactic.desc}</p>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function selectInfluence(id) {
+            chosenInfluence = id;
+            renderInfluenceTactics();
+            const tactic = influenceOptions.find(t => t.id === id);
+            const feedback = document.getElementById('influence-feedback');
+            feedback.classList.remove('hidden');
+            feedback.className = `p-3.5 rounded-xl border text-xs sm:text-sm ${
+                tactic.success > 0 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'
+            }`;
+            feedback.innerHTML = `<strong>Tactic Outcome:</strong> ${tactic.feedback}`;
+        }
+
+        function lockStage4Decision() {
+            if (!chosenInfluence) {
+                alert("Please select an influence tactic first.");
+                return;
+            }
+            const sec = document.getElementById('stage4-reflection-sec');
+            sec.classList.remove('opacity-40', 'pointer-events-none');
+            document.getElementById('stage4-lock-btn').classList.add('hidden');
+            document.getElementById('reflection-stage-4').focus();
+        }
+
+        function submitStage4() {
+            if (!updateWordCount(4)) {
+                alert("Please complete the reflective question with 30 to 100 words.");
+                return;
+            }
+            const tactic = influenceOptions.find(t => t.id === chosenInfluence);
+            updateMetrics(+5, tactic.eng, +5, tactic.success);
+            nextStage(5);
+        }
+
+        // STAGE 5 LOGIC
+        function renderEmpowermentStage() {
+            const container = document.getElementById('empowerment-members');
+            container.innerHTML = '';
+            empowermentMembers.forEach(m => {
+                const currentSelection = empowermentAssignments[m.id] || "";
+                const card = document.createElement('div');
+                card.className = "bg-white border border-slate-200 rounded-xl p-4 text-xs space-y-3 flex flex-col justify-between shadow-sm";
+                card.innerHTML = `
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm">${m.name}</h4>
+                        <div class="flex gap-2 mt-1">
+                            <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">${m.comp}</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">${m.conf}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] text-slate-600 font-semibold mb-1">Support Mechanism:</label>
+                        <select onchange="assignEmpowerment(${m.id}, this.value)" class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2 focus:outline-none focus:border-sky-500">
+                            <option value="">-- Choose Support --</option>
+                            ${supportOptions.map(opt => `<option value="${opt}" ${currentSelection === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function assignEmpowerment(memberId, val) {
+            empowermentAssignments[memberId] = val;
+            checkEmpowermentAccuracy();
+        }
+
+        function checkEmpowermentAccuracy() {
+            const feedback = document.getElementById('empowerment-feedback');
+            const keys = Object.keys(empowermentAssignments);
+            if (keys.length < 3) {
+                feedback.classList.add('hidden');
+                return;
+            }
+
+            let correct = 0;
+            empowermentMembers.forEach(m => {
+                if (empowermentAssignments[m.id] === m.target) correct++;
+            });
+
+            feedback.classList.remove('hidden');
+            feedback.className = `p-3.5 rounded-xl border text-xs sm:text-sm ${
+                correct === 3 ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-amber-50 border-amber-300 text-amber-900'
+            }`;
+            feedback.innerHTML = `<strong>Alignment Result:</strong> ${correct} of 3 correctly aligned with competence and confidence levels.`;
+        }
+
+        function lockStage5Decision() {
+            if (Object.keys(empowermentAssignments).length < 3) {
+                alert("Please select support mechanisms for all 3 team members.");
+                return;
+            }
+            const sec = document.getElementById('stage5-reflection-sec');
+            sec.classList.remove('opacity-40', 'pointer-events-none');
+            document.getElementById('stage5-lock-btn').classList.add('hidden');
+            document.getElementById('reflection-stage-5').focus();
+        }
+
+        function submitStage5() {
+            if (!updateWordCount(5)) {
+                alert("Please complete the reflective question with 30 to 100 words.");
+                return;
+            }
+
+            let correct = 0;
+            empowermentMembers.forEach(m => {
+                if (empowermentAssignments[m.id] === m.target) correct++;
+            });
+
+            updateMetrics(+5, +10, correct * 5, correct * 5);
+            calculateFinalResults();
+            nextStage(6);
+        }
+
+        // FINAL STAGE REPORT LOGIC
+        function calculateFinalResults() {
+            const overallScore = Math.round((metrics.trust + metrics.engagement + metrics.performance + metrics.success) / 4);
+            
+            document.getElementById('final-score-text').innerText = `${overallScore}%`;
+            document.getElementById('final-trust-val').innerText = `${metrics.trust}%`;
+            document.getElementById('final-engagement-val').innerText = `${metrics.engagement}%`;
+            document.getElementById('final-performance-val').innerText = `${metrics.performance}%`;
+            document.getElementById('final-success-val').innerText = `${metrics.success}%`;
+
+            const circle = document.getElementById('final-score-circle');
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (overallScore / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            let title = "";
+            let desc = "";
+
+            if (overallScore >= 80) {
+                title = "Inclusive & Empowering Leader";
+                desc = "You excel at balancing strategic task execution with high compassionate leadership, fostering psychological safety and long-term team commitment.";
+            } else if (overallScore >= 65) {
+                title = "Results-Driven Manager";
+                desc = "Strong focus on performance and structure. Fostering deeper psychological trust and adaptive delegation will unlock higher team engagement.";
+            } else {
+                title = "Developing People Manager";
+                desc = "Good foundational effort. Focus on aligning team roles (Belbin), avoiding coercive influence tactics, and practicing supportive delegation.";
+            }
+
+            document.getElementById('archetype-title').innerText = title;
+            document.getElementById('archetype-desc').innerText = desc;
+
+            const container = document.getElementById('summary-reflections-container');
+            container.innerHTML = `
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sky-700 mb-1">Scenario 1: Belbin Team Composition Reflection</h4>
+                    <p class="text-slate-700 font-mono text-[11px] leading-relaxed">${reflections.stage1 || "No reflection submitted."}</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sky-700 mb-1">Scenario 2: Team Culture Interventions Reflection</h4>
+                    <p class="text-slate-700 font-mono text-[11px] leading-relaxed">${reflections.stage2 || "No reflection submitted."}</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sky-700 mb-1">Scenario 3: Compassionate Leadership Reflection</h4>
+                    <p class="text-slate-700 font-mono text-[11px] leading-relaxed">${reflections.stage3 || "No reflection submitted."}</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sky-700 mb-1">Scenario 4: Power & Influence Selection Reflection</h4>
+                    <p class="text-slate-700 font-mono text-[11px] leading-relaxed">${reflections.stage4 || "No reflection submitted."}</p>
+                </div>
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-sky-700 mb-1">Scenario 5: Delegation & Empowerment Reflection</h4>
+                    <p class="text-slate-700 font-mono text-[11px] leading-relaxed">${reflections.stage5 || "No reflection submitted."}</p>
+                </div>
+            `;
+        }
+
+        function resetSimulation() {
+            metrics = { trust: 50, engagement: 50, performance: 50, success: 50 };
+            selectedTeamIds = [];
+            culturePriorities = [];
+            chosenCompassion = null;
+            chosenInfluence = null;
+            empowermentAssignments = {};
+            timerSeconds = 20 * 60;
+            
+            for (let i = 1; i <= 5; i++) {
+                reflections[`stage${i}`] = "";
+                const el = document.getElementById(`reflection-stage-${i}`);
+                if (el) el.value = "";
+                const sec = document.getElementById(`stage${i}-reflection-sec`);
+                if (sec) sec.classList.add('opacity-40', 'pointer-events-none');
+                const btn = document.getElementById(`stage${i}-lock-btn`);
+                if (btn) btn.classList.remove('hidden');
+            }
+
+            updateMetrics(0, 0, 0, 0);
+            renderBelbinCandidates();
+            renderCultureActions();
+            renderCompassionOptions();
+            renderInfluenceTactics();
+            renderEmpowermentStage();
+            nextStage(0);
+        }
+    </script>
+</body>
+</html>
